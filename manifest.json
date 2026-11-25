@@ -1,0 +1,59 @@
+{
+  "id": "./index.html",
+  "name": "Noor-ul-Islam",
+  "short_name": "Noor-ul-Islam",
+  "description": "Noor-ul-Islam — Mobile Islamic PWA for daily Namaz & Jummah timings, short Azan alerts, Quran Pak (114 Surahs with Urdu translation & audio), Hadees, Tasbeeh & Masnoon Duas. Created by Israr.",
+  "developer": {
+    "name": "Israr"
+  },
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#064E3B",
+  "theme_color": "#064E3B",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["lifestyle", "books", "education"],
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Namaz Timings",
+      "short_name": "Namaz",
+      "url": "./index.html#namaz",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Quran Pak",
+      "short_name": "Quran",
+      "url": "./index.html#quran",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Tasbeeh & Duas",
+      "short_name": "Tasbeeh",
+      "url": "./index.html#tasbeeh",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

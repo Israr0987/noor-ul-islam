@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#064E3B" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Noor-ul-Islam" />
+  <meta name="author" content="Israr - Israr Digital Hub" />
+  <meta name="description" content="Noor-ul-Islam — Simple Islamic PWA for Namaz Timings & Azan, Quran Pak with Urdu & Audio, Sahih Hadees, Tasbeeh & Masnoon Duas. By Israr (Israr Digital Hub)." />
+  <title>Noor-ul-Islam — نورُ الاسلام</title>
+
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png" />
+
+  <!-- Readable Arabic, Urdu Nastaliq & Clean UI Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Noto+Sans+Arabic:wght@400;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-top-row">
+        <div class="brand-group">
+          <img src="./icons/icon-192.png" alt="Noor-ul-Islam" class="brand-logo" />
+          <div>
+            <div class="brand-title-row">
+              <h1 class="brand-title">Noor-ul-Islam</h1>
+              <span class="brand-urdu" lang="ur" dir="rtl">نورُ الاسلام</span>
+            </div>
+            <p class="brand-owner-line">App Owner: <strong>Israr (Israr Digital Hub)</strong></p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <a href="https://wa.me/923458358671?text=Assalamu%20Alaikum%20Israr%20bhai%2C%20I%20am%20contacting%20from%20Noor-ul-Islam%20App." target="_blank" rel="noopener noreferrer" class="header-wa-btn" aria-label="WhatsApp Israr 03458358671" title="WhatsApp: 03458358671">
+            <svg viewBox="0 0 24 24" class="icon-svg" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.4-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.52 5.95c-.25-.12-1.47-.73-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.98-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.07s.89 2.4 1.01 2.57c.12.17 1.75 2.67 4.24 3.75.59.26 1.06.41 1.42.52.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.17-.48-.29"/></svg>
+            <span>03458358671</span>
+          </a>
+          <button type="button" class="header-menu-btn" id="openOwnerModalBtn" aria-label="App Owner & Menu">
+            <svg viewBox="0 0 24 24" class="icon-svg" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Prominent Active Azan Stop Banner (Shown when Azan is playing) -->
+    <div class="azan-alert-banner hidden" id="azanBanner" role="alert" aria-live="assertive">
+      <div class="azan-banner-inner">
+        <div class="azan-pulse-icon" aria-hidden="true">🕌</div>
+        <div class="azan-banner-text">
+          <strong id="azanBannerTitle">Azan Alert • اذان ہو رہی ہے</strong>
+          <span id="azanBannerSub">Hayya 'alas-Salah • Prayer Time</span>
+        </div>
+        <button type="button" class="btn-stop-azan" id="stopAzanBtn">
+          ⏹ Stop Azan
+        </button>
+        <button type="button" class="btn-dismiss-azan" id="dismissAzanBannerBtn" aria-label="Dismiss Alert">✕</button>
+      </div>
+    </div>
+
+    <!-- Install App Banner (Appears when browser supports PWA install) -->
+    <div class="install-banner hidden" id="installBanner">
+      <div class="install-banner-text">
+        <strong>Install Noor-ul-Islam App</strong>
+        <span>Add to phone Home Screen for quick Azan & offline use</span>
+      </div>
+      <div class="install-banner-actions">
+        <button type="button" class="btn-install-now" id="installAppBtn">Install</button>
+        <button type="button" class="btn-install-dismiss" id="dismissInstallBtn" aria-label="Dismiss">✕</button>
+      </div>
+    </div>
+
+    <!-- Main Scrollable Content Area -->
+    <main class="app-main" id="appMain">
+
+      <!-- TAB 1: NAMAZ TIMINGS -->
+      <section class="tab-panel active" id="tab-namaz" aria-label="Namaz Timings">
+
+        <!-- Hero Next Namaz & Countdown Card -->
+        <div class="namaz-hero-card">
+          <div class="namaz-hero-top">
+            <button type="button" class="city-pill-btn" id="openCityModalBtn">
+              <span>📍</span>
+              <span id="currentCityLabel">Karachi, Pakistan</span>
+              <span class="pill-change-tag">Change</span>
+            </button>
+            <span class="fiqh-badge">Hanafi • Karachi</span>
+          </div>
+
+          <div class="date-strip">
+            <div class="hijri-date" id="hijriDateText">Loading Hijri date...</div>
+            <div class="greg-date" id="gregDateText"></div>
+          </div>
+
+          <div class="next-namaz-box">
+            <div class="next-label-row">
+              <span class="next-tag">NEXT NAMAZ • اگلی نماز</span>
+              <span class="next-time-exact" id="nextPrayerTime">--:--</span>
+            </div>
+            <div class="next-prayer-name-row">
+              <h2 class="next-prayer-en" id="nextPrayerName">Loading...</h2>
+              <span class="next-prayer-ur" id="nextPrayerUrdu" lang="ur" dir="rtl"></span>
+            </div>
+            <div class="countdown-box">
+              <span class="countdown-label">Time Remaining / باقی وقت</span>
+              <div class="countdown-timer" id="prayerCountdown">--:--:--</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Push Notification & Azan Alert Controls -->
+        <div class="card alert-control-card">
+          <div class="card-header-row">
+            <div>
+              <h3 class="card-title">Enable Alerts & Permissions</h3>
+              <p class="card-sub-urdu" lang="ur" dir="rtl">نماز کے وقت موبائل الرٹ اور مختصر اذان</p>
+            </div>
+            <span class="status-pill status-off" id="notifStatusBadge">Checking...</span>
+          </div>
+
+          <button type="button" class="btn-primary-large" id="enableNotifBtn">
+            <span class="btn-icon">🔔</span>
+            <span>Enable Alerts & Permissions</span>
+          </button>
+
+          <!-- Jummah / Silent Alert Mode Toggle -->
+          <div class="silent-mode-row">
+            <div class="silent-mode-text">
+              <strong>Jummah / Silent Alert Mode</strong>
+              <span lang="ur" dir="rtl">جمعہ / سائلنٹ موڈ (صرف الرٹ، اذان کی آواز بند)</span>
+            </div>
+            <button type="button" class="toggle-switch" id="silentModeToggle" role="switch" aria-checked="false" aria-label="Toggle Jummah or Silent Alert Mode">
+              <span class="toggle-knob"></span>
+            </button>
+          </div>
+
+          <div class="azan-secondary-actions">
+            <button type="button" class="btn-outline-large" id="testAzanBtn">
+              <span>🔊</span>
+              <span>Test Short Azan & Alert</span>
+            </button>
+            <button type="button" class="btn-danger-large hidden" id="inlineStopAzanBtn">
+              <span>⏹</span>
+              <span>Stop Azan Now</span>
+            </button>
+          </div>
+
+          <!-- Blocked / Android Battery Guidance -->
+          <div class="perm-guide-box hidden" id="blockedPermGuide">
+            <div class="perm-guide-title">📱 How to Fix Blocked Alerts (Android Guide)</div>
+            <ol class="perm-guide-steps">
+              <li>Open <strong>Phone Settings → Apps → Noor-ul-Islam</strong> (or Chrome) → <strong>Notifications → Allow</strong>.</li>
+              <li>Open <strong>Battery / App Power Usage</strong> → choose <strong>Unrestricted</strong> so background & screen-off alerts arrive reliably.</li>
+            </ol>
+          </div>
+
+          <div class="helper-footer-row">
+            <p class="helper-note" id="notifHelperNote">
+              Short gentle Azan (16s) plays when active. Press Volume Down/Up or Stop Azan anytime. For reliable screen-off alerts on Android, keep Notifications allowed and Battery set to Unrestricted.
+            </p>
+            <button type="button" class="btn-link-guide" id="togglePermGuideBtn">
+              Android Battery & Settings Guide
+            </button>
+          </div>
+        </div>
+
+        <!-- Today's 5 Prayers Schedule -->
+        <div class="section-heading-row">
+          <h3 class="section-heading">Today's Prayer Times</h3>
+          <span class="section-heading-ur" lang="ur" dir="rtl">آج کے اوقاتِ نماز</span>
+        </div>
+
+        <div class="prayers-list" id="prayersList">
+          <div class="loading-box">Fetching prayer timings for Karachi...</div>
+        </div>
+
+        <!-- Jummah Prayer Card (Right below daily prayer timings list) -->
+        <div class="jummah-card" id="jummahCard">
+          <div class="jummah-top-row">
+            <div class="prayer-name-col">
+              <div class="prayer-icon-box jummah-icon-box">🕌</div>
+              <div>
+                <div class="prayer-en">Jummah (Friday)</div>
+                <div class="prayer-ur" lang="ur" dir="rtl">نمازِ جمعہ</div>
+              </div>
+            </div>
+            <div class="prayer-time-col">
+              <div class="prayer-time-val" id="jummahStartTime">--:--</div>
+              <span class="jummah-day-badge" id="jummahDayBadge">Every Friday</span>
+            </div>
+          </div>
+          <p class="jummah-info-note" id="jummahInfoNote">
+            Jummah time starts at Dhuhr. Local masjid Khutbah &amp; Jama'at are usually held between 1:00 PM – 1:45 PM.
+          </p>
+          <button type="button" class="btn-jummah-alert-toggle" id="jummahQuickAlertBtn">
+            🔔 Gentle 16s Alert Active • Tap for Silent Mode
+          </button>
+        </div>
+
+      </section>
+
+      <!-- TAB 2: QURAN PAK -->
+      <section class="tab-panel" id="tab-quran" aria-label="Quran Pak">
+
+        <!-- Quran Browser View (Surah & Para List) -->
+        <div id="quranListView">
+          <div class="sub-toggle-bar" role="tablist">
+            <button type="button" class="sub-toggle-btn active" data-quran-mode="surah">
+              Surah Wise <span class="ur-inline" lang="ur">سورتیں (114)</span>
+            </button>
+            <button type="button" class="sub-toggle-btn" data-quran-mode="para">
+              Para Wise <span class="ur-inline" lang="ur">پارے (30)</span>
+            </button>
+          </div>
+
+          <div class="search-box-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="search" id="quranSearchInput" class="search-input" placeholder="Search Surah or Para (e.g. Yaseen, 36, یٰسین)..." autocomplete="off" />
+          </div>
+
+          <div class="quran-items-list" id="quranItemsList">
+            <div class="loading-box">Loading 114 Surahs...</div>
+          </div>
+        </div>
+
+        <!-- Quran Reader View (Opened when tapping a Surah or Para) -->
+        <div id="quranReaderView" class="hidden">
+          <div class="reader-topbar">
+            <button type="button" class="btn-back" id="quranBackBtn">
+              ← Back
+            </button>
+            <div class="reader-title-group">
+              <h2 class="reader-title-en" id="readerTitleEn">Surah Al-Fatihah</h2>
+              <span class="reader-title-ur" id="readerTitleUr" lang="ur" dir="rtl">الفاتحہ</span>
+            </div>
+            <div class="font-size-controls">
+              <button type="button" class="btn-font" id="fontDecreaseBtn" aria-label="Decrease text size">A-</button>
+              <button type="button" class="btn-font" id="fontIncreaseBtn" aria-label="Increase text size">A+</button>
+            </div>
+          </div>
+
+          <!-- Big Audio Player for Mishary Alafasy -->
+          <div class="quran-audio-card">
+            <div class="audio-info-row">
+              <div>
+                <div class="audio-reciter">Qari Mishary Rashid Alafasy</div>
+                <div class="audio-progress-text" id="quranAudioStatus">Tap Play to listen with translation</div>
+              </div>
+              <span class="audio-ayah-counter" id="quranAyahCounter">0 / 0</span>
+            </div>
+            <div class="audio-controls-row">
+              <button type="button" class="btn-audio-step" id="prevAyahBtn" aria-label="Previous Ayah">⏮ Prev</button>
+              <button type="button" class="btn-audio-play" id="playPauseSurahBtn">
+                ▶ Play Audio
+              </button>
+              <button type="button" class="btn-audio-step" id="nextAyahBtn" aria-label="Next Ayah">Next ⏭</button>
+            </div>
+          </div>
+
+          <div class="bismillah-banner" id="bismillahBanner" lang="ar" dir="rtl">
+            بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ
+          </div>
+
+          <div class="ayahs-container" id="ayahsContainer">
+            <div class="loading-box">Loading Quran verses & Urdu translation...</div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 3: HADEES -->
+      <section class="tab-panel" id="tab-hadees" aria-label="Sahih Hadees">
+        <div class="section-heading-row">
+          <h2 class="section-heading">Authentic Ahadees</h2>
+          <span class="section-heading-ur" lang="ur" dir="rtl">احادیثِ مبارکہ ﷺ</span>
+        </div>
+
+        <div class="filter-chips-row" id="hadeesFilterRow">
+          <button type="button" class="chip-btn active" data-hadees-book="all">All Books</button>
+          <button type="button" class="chip-btn" data-hadees-book="Sahih al-Bukhari">Sahih Bukhari</button>
+          <button type="button" class="chip-btn" data-hadees-book="Sahih Muslim">Sahih Muslim</button>
+        </div>
+
+        <div class="hadees-list" id="hadeesList"></div>
+      </section>
+
+      <!-- TAB 4: TASBEEH & DUAS -->
+      <section class="tab-panel" id="tab-tasbeeh" aria-label="Tasbeeh and Masnoon Duas">
+        <div class="sub-toggle-bar" role="tablist">
+          <button type="button" class="sub-toggle-btn active" data-td-mode="tasbeeh">
+            📿 Tasbeeh <span class="ur-inline" lang="ur">تسبیح</span>
+          </button>
+          <button type="button" class="sub-toggle-btn" data-td-mode="duas">
+            🤲 Masnoon Duas <span class="ur-inline" lang="ur">دعائیں</span>
+          </button>
+        </div>
+
+        <!-- Tasbeeh Counter Subpanel -->
+        <div id="tasbeehSubpanel">
+          <div class="zikr-chips-scroll" id="zikrPresetRow"></div>
+
+          <div class="tasbeeh-card">
+            <div class="zikr-display-arabic" id="zikrArabic" lang="ar" dir="rtl">سُبْحَانَ اللّٰهِ</div>
+            <div class="zikr-display-roman" id="zikrRoman">SubhanAllah</div>
+            <div class="zikr-display-urdu" id="zikrUrdu" lang="ur" dir="rtl">اللہ پاک ہے</div>
+
+            <div class="target-row">
+              <span>Target:</span>
+              <button type="button" class="target-chip active" data-target="33">33</button>
+              <button type="button" class="target-chip" data-target="99">99</button>
+              <button type="button" class="target-chip" data-target="100">100</button>
+              <button type="button" class="target-chip" data-target="0">∞ Open</button>
+            </div>
+
+            <button type="button" class="tasbeeh-tap-circle" id="tasbeehTapBtn" aria-label="Tap to count Tasbeeh">
+              <span class="tasbeeh-count-num" id="tasbeehCountNum">0</span>
+              <span class="tasbeeh-target-text" id="tasbeehTargetLabel">of 33</span>
+              <span class="tasbeeh-tap-hint">TAP TO COUNT • دبائیں</span>
+            </button>
+
+            <div class="tasbeeh-footer-controls">
+              <div class="total-saved-box">
+                <span>Saved Total</span>
+                <strong id="tasbeehTotalSaved">0</strong>
+              </div>
+              <button type="button" class="btn-reset-tasbeeh" id="resetTasbeehBtn">
+                ↺ Reset Count
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Masnoon Duas Subpanel -->
+        <div id="duasSubpanel" class="hidden">
+          <div class="filter-chips-row" id="duasFilterRow">
+            <button type="button" class="chip-btn active" data-dua-cat="all">All Duas</button>
+            <button type="button" class="chip-btn" data-dua-cat="subah-shaam">Subah / Shaam</button>
+            <button type="button" class="chip-btn" data-dua-cat="sone-jagne">Sone / Jagne</button>
+            <button type="button" class="chip-btn" data-dua-cat="safar">Safar</button>
+            <button type="button" class="chip-btn" data-dua-cat="khana">Khana</button>
+          </div>
+          <div class="duas-list" id="duasList"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Non-Intrusive Banner Ad Container (Above Bottom Navigation) -->
+    <aside class="bottom-ad-dock" id="bottomAdContainer" aria-label="Advertisement" data-ad-policy="halal-family-safe">
+      <div class="ad-header-row">
+        <span class="ad-label">Ad</span>
+      </div>
+      <div class="ad-slot-frame" id="adSlotFrame">
+        <!-- Halal / Family-Safe Google AdSense <ins class="adsbygoogle"> unit goes here -->
+        <div class="ad-placeholder-box" id="adPlaceholderBox">
+          <span>Halal Banner Ad Space • 320×50</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Bottom 4-Tab Navigation -->
+    <nav class="bottom-nav" aria-label="Main Navigation">
+      <button type="button" class="nav-tab active" data-tab="namaz">
+        <span class="nav-icon" aria-hidden="true">🕌</span>
+        <span class="nav-label">Namaz</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="quran">
+        <span class="nav-icon" aria-hidden="true">📖</span>
+        <span class="nav-label">Quran</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="hadees">
+        <span class="nav-icon" aria-hidden="true">📜</span>
+        <span class="nav-label">Hadees</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="tasbeeh">
+        <span class="nav-icon" aria-hidden="true">📿</span>
+        <span class="nav-label">Tasbeeh & Duas</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- City Selector Modal -->
+  <div class="modal-backdrop hidden" id="cityModal" role="dialog" aria-modal="true" aria-labelledby="cityModalTitle">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3 id="cityModalTitle">Select City / شہر منتخب کریں</h3>
+        <button type="button" class="modal-close-btn" data-close-modal="cityModal" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <button type="button" class="btn-gps-detect" id="detectGpsBtn">
+          <span>📡</span>
+          <span>Auto-Detect My Location (GPS)</span>
+        </button>
+        <p class="modal-subtitle">Popular Pakistani Cities (Method: Karachi, Hanafi):</p>
+        <div class="cities-grid" id="citiesGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Owner Info & App Menu Modal -->
+  <div class="modal-backdrop hidden" id="ownerModal" role="dialog" aria-modal="true" aria-labelledby="ownerModalTitle">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3 id="ownerModalTitle">About Noor-ul-Islam</h3>
+        <button type="button" class="modal-close-btn" data-close-modal="ownerModal" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="owner-card">
+          <img src="./icons/icon-192.png" alt="Noor-ul-Islam" class="owner-logo" />
+          <h4>Noor-ul-Islam (نورُ الاسلام)</h4>
+          <p class="owner-credit">App Owner: <strong>Israr (Israr Digital Hub)</strong></p>
+          <p class="owner-desc">
+            Designed specially for everyday mobile users and elders — clean, ad-free, easy to read, and works offline.
+          </p>
+          <a href="https://wa.me/923458358671?text=Assalamu%20Alaikum%20Israr%20bhai%2C%20I%20am%20messaging%20from%20Noor-ul-Islam%20App." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-full">
+            💬 WhatsApp Israr: 03458358671
+          </a>
+          <a href="tel:+923458358671" class="btn-call-full">
+            📞 Call: 03458358671
+          </a>
+          <button type="button" class="btn-share-app-full" id="shareAppBtn">
+            🔗 Share Noor-ul-Islam App Link
+          </button>
+        </div>
+
+        <div class="install-help-card">
+          <h5>📲 Install as Android App / APK</h5>
+          <p>Tap Chrome Menu (⋮) → <strong>"Install App"</strong> or <strong>"Add to Home Screen"</strong>. For reliable prayer alerts, set Battery to <strong>Unrestricted</strong> in Android App Settings.</p>
+          <button type="button" class="btn-primary-large hidden" id="modalInstallBtn">
+            Install App Now
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- First-Launch Permissions Modal -->
+  <div class="modal-backdrop hidden" id="permPromptModal" role="dialog" aria-modal="true" aria-labelledby="permPromptTitle">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3 id="permPromptTitle">🕌 Namaz Alerts & Short Azan</h3>
+        <button type="button" class="modal-close-btn" id="dismissPermPromptBtn" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="perm-welcome-box">
+          <p class="perm-welcome-en">
+            Allow mobile notifications so <strong>Noor-ul-Islam</strong> can alert you at Fajr, Dhuhr, Asr, Maghrib, and Isha times with a short, gentle Azan.
+          </p>
+          <p class="perm-welcome-ur" lang="ur" dir="rtl">
+            نماز کے اوقات پر بروقت الرٹ اور مختصر اذان کے لیے نوٹیفکیشن کی اجازت دیں۔
+          </p>
+          <button type="button" class="btn-primary-large" id="confirmFirstPermBtn">
+            <span>🔔</span>
+            <span>Allow Namaz Alerts & Azan</span>
+          </button>
+          <button type="button" class="btn-outline-large" id="laterFirstPermBtn" style="margin-top:10px;">
+            Not Now
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Feedback -->
+  <div class="toast hidden" id="appToast" role="status" aria-live="polite"></div>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
